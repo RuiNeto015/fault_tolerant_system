@@ -1,0 +1,24 @@
+# Router ###############################################################################################################
+
+erl -sname router
+c(router), c(router_monitor), router:start().
+
+# Server ###############################################################################################################
+
+erl -sname prolog
+c(server), c(server_monitor), server_monitor:start(router@RuiNetoEnvy15).
+server ! {add_server}.
+observer:start().
+
+# Clients ##############################################################################################################
+
+erl -sname client1
+c(client), client:start().
+
+client ! {get_servers, router@RuiNetoEnvy15}.
+
+client ! {join_server, prolog@RuiNetoEnvy15}.
+
+client ! {send_message, prolog@RuiNetoEnvy15, ola}.
+
+client ! {leave_server, prolog@RuiNetoEnvy15}.
